@@ -1,15 +1,32 @@
 //const expIf = new RegExp("ab");
-const expPrint = /printf'(a-b)'/;
-const expVar = /^\D(\D|\d|-|_)*/; // equivalente a ^[a-zA-Z]([a-zA-Z]|[0-9]|-)*
+const expVarName = /\D(\D|\d|-|_)*/; // equivalente a ^[a-zA-Z]([a-zA-Z]|[0-9]|-)*
+const expGetIfPar = /(?<vn>\w+)\s*(?<op>(>|<|==|<=|>=))\s*(?<con>\w+)/; //expresion obtener parametros if
+const expIfDecl = /if\s*\(\s*\w+\s*(>|<|==|<=|>=)\s*\w+\s*\)\:/; //exp declaracion if
 
-//const expVarDecl = /^(int|float|double|string)/;
+//const input = 'if(abc==8):'
 
-export function variable(input) {
-  return expVar.test(input);
+function chcVarName(varName) {
+  return expVarName.test(varName);
 }
 
-// const test = ["0gb", "mod_1", "1-a", "Ac--12", "A", "sumin1", "sumon"];
+function alex(inp = "") {
+  let match = expGetIfPar.exec(inp);
+  let comp1 = match.groups.vn;
+  let opert = match.groups.op;
+  let comp2 = match.groups.con;
 
-// test.forEach((element) => {
-//   console.log(element, variable(element));
-// });
+  return [comp1, opert, comp2];
+}
+
+function checkImp(input) {
+  if (!expIfDecl.test(input)) {
+    console.log("invalid declaration of syntax if");
+    return 0;
+  }
+  console.log("valid declaration of syntax if");
+  const [a, b, c] = alex(input);
+  console.log("comparador 1: " + a, "operador: " + b, " comparador 2: " + c);
+  return 1;
+}
+
+checkImp("if(v>3):");
