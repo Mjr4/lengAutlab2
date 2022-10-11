@@ -1,8 +1,12 @@
-/*const verify = document.querySelector(".btm");
-const text = document.querySelector("expr");
+import {variable} from './checkExp.js';
 
-verify.addEventListener("click", () => {
-  console.log(text);
+const verify = document.querySelector("#btm");
+const text = document.querySelector("#expr");
+const form = document.querySelector("#form");
+
+
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
+  console.log(variable(text.value));
 });
-*/
 

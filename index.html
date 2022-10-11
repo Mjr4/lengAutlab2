@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Proyecto 2</title>
     <link rel="stylesheet" href="./styles.css" />
-    <script src="index.js" defer></script>
+    <script src="index.js" type="module" defer></script>
   </head>
   <body>
     <div class="container">
@@ -14,10 +14,12 @@
         <h1>Proyecto 2</h1>
         <h2>Lenguajes formales y automatas</h2>
       </div>
-      <label for="expr">Introduce la sintaxis
-        <input class="expr" name="expr"type="text">
-      </label>
-      <input class="btm" type="submit">
+      <form id="form">
+        <label for="expr">Introduce la sintaxis
+          <input id="expr" type="text">
+        </label>
+        <button id="btm" type="submit">Verficar</button>
+      </form>      
     </div>
   </body>
 </html>
