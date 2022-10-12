@@ -3,6 +3,8 @@ const expVarName = /^\D(\D|\d|-|_)*/; // equivalente a ^[a-zA-Z]([a-zA-Z]|[0-9]|
 const expGetIfPar = /(?<vn>(\w+|\"(\w*\s*)*\"))\s*(?<op>(>|<|==|<=|>=))\s*(?<con>(\w+|\"(\w*\s*)*\"))/; //expresion obtener parametros if
 const expIfDecl = /if\s*\(\s*(\w+|\"(\w*\s*)*\")\s*(>|<|==|<=|>=)\s*(\w+|\"(\w*\s*)*\")\s*\)\:/; //exp declaracion if
 const expStrg = /^\"\w*|\s*\"/
+const expFunct = /^def [a-zA-Z]+\(([a-z]\w*,*)*\)\:$/
+const expWhile = /^while\s*\((\w*|\D*)*\):$/
 //const input = 'if(abc==8):'
 
 function chcVarName(varName) {
@@ -41,8 +43,12 @@ export function identifSyntx(input) {
     }
 
     return 'incorrect syntax for IF statemen'
+  }else if (expFunct.test(input)){
+    return 'Syntax correct for Function'
+  }else if (expWhile.test(input)){
+    return 'Syntax correct for While'
   }
-  return 'not if statemen'
+  return 'not found statemen'
 }
 
 

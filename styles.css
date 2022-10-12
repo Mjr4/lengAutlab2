@@ -1,8 +1,41 @@
 .container{
-    position: absolute;
+    margin:  5px 50px;
+    border: 2px black solid;
+    border-radius: 8px;
 }
+
 .title{
     display: block;
-    margin: auto;
-    
+    margin: 5px;
+}
+
+.title h1,h2{
+    justify-content: center;
+    display: flex;
+}
+
+#form textarea,button{
+    display: block;
+    justify-content: center;
+    margin: 10px auto;
+}
+
+.msg {
+    display: block;
+    margin:20px px;
+}
+
+
+
+#expr {
+    width: 80%;
+    height: 200px;
+    font-family: monospace;
+    font-size: large;
+}
+
+#respons {
+    margin: 10px auto;
+    display: flex;
+    justify-content: center;
 }
