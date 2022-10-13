@@ -19,7 +19,6 @@ text.addEventListener('keydown', function(e){
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
-  console.log(text.value);
   resp.innerHTML = identifSyntx(text.value);
   
 });

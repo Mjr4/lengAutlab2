@@ -3,8 +3,9 @@ const expVarName = /^[a-z]+(\d|[a-z]|-|_)*$/; // equivalente a ^[a-zA-Z]([a-zA-Z
 const expGetIfPar = /(?<vn>(\w+|\"(\w*\s*)*\"))\s*(?<op>(>|<|==|<=|>=))\s*(?<con>(\w+|\"(\w*\s*)*\"))/; //expresion obtener parametros if
 const expIfDecl = /if\s*\((\w*|\W*)*\)\:\n(\t|\s{4})(pass)$/; //exp declaracion if
 const expStrg = /^\"\w*|\s*\"/;
-const expFunct = /^def [a-zA-Z]+\(([a-z]\w*,*)*\)\:$/;
+const expFunct = /^def [a-z]+\((\w|,|\s)*\)\:$/;;
 const expWhile = /^while\s*\((\w*|\D*)*\):$/;
+const expGetFunctPar = /\((?<p>(\w+|\s*|,)*\w+)*\)/;
 //const input = 'if(abc==8):'
 
 function chcVarName(varName) {
@@ -42,7 +43,25 @@ export function identifSyntx(input) {
     // todo: añadir condicional para numeros
     return "incorrect syntax for IF statemen";
   } else if (expFunct.test(input)) {
-    return "Syntax correct for Function";
+    if (!expGetFunctPar.test(input)){
+      return "error de parametros"
+    }
+    const param = expGetFunctPar.exec(input)
+    let param_a = param.groups.p
+    param_a = param_a.split(",")
+    let all_param = false
+    param_a.forEach(element => {
+      if(expVarName.test(element)){
+        all_param = true
+      }else{
+        all_param = false
+      }
+    });
+    if (all_param){
+      return "Syntax correct for Function";
+    }else{
+      return "Syntax incorrect for Function";
+    }
   } else if (expWhile.test(input)) {
     return "Syntax correct for While";
   }
