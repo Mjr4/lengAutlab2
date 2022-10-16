@@ -64,16 +64,17 @@ function getLogOp(syntax=""){
 
 function validateIfParam(param1, opert, param2) {
   if (isValidVarName(param1) && isValidVarName(param2)) {
-    return "Correcta declaracion de sentencia If y nombres de variables";
+    return ["Correcta declaracion de nombres de variable "+param1+", "+param2, true];
   } else if (isValidStrgs(param1) && isValidStrgs(param2) && opert == "==") {
-    return "Correcta declaracion de sentencia If y validacion de cadenas";
+    return ["Correcta declaracion de literales "+param1+", "+param2, true];
   } else if (isValidVarName(param1) && isValidStrgs(param2) && opert == "==") {
-    return "Correcta declaracion de sentencia If, nombres de variables y validacion de cadenas";
+    return ["Correcta declaracion de nombre de variable "+param1+" y literal "+param2, true];
   } else if (isValidStrgs(param1) && isValidVarName(param2) && opert == "==") {
-    return "Correcta declaracion de sentencia If, nombres de variables y validacion de cadenas";
+    return ["Correcta declaracion de nombre de variable "+param2+" y literal "+param1, true];
+  }else{
+    return ["Error de parametros", false];
   }
   // todo: añadir condicional para numeros
-  return "Error de parametros";
 }
 
 function isValidParam(functParmList) {
@@ -98,25 +99,34 @@ export function identifSyntx(input = "") {
     }
     let [param1, opert, param2] = getIfparam(input);
     let val = validateIfParam(param1, opert, param2)
-    result.push([val, true])
+    result.push(val)
     return result
   } else if (isValidFunctDecl(input)) {
+    result.push(['Encontrada sentencia valida def nombre():', true]);
     if (!arValidFunctParam(input)) {
-      //return "Error de parametros";
+      result.push(['Error de parametros en def nombre():', false]);
+      return result
     }
     let functParmList = getFunctionParam(input);
     let validIfParam = isValidParam(functParmList);
-    /*return validIfParam
-      ? "Correcta declaracion de funcion"
-      : "Error de parametros";*/
-  } else if (isValidWhileDecl(input)) {
-    if(arValidIfParam(input) | isValidLogOp(input)) {
-      //return "Syntaxis correcta para sentencia While";
+    if (validIfParam){
+      result.push(["Correcta declaracion de parametros en funcion", true])
+    }else{
+      result.push(["Error de declaracion de parametros", false]);
     }
-    //return "Error de parametros o operadores"
+    return result
+
+  } else if (isValidWhileDecl(input)) {
+    result.push(["Encontrada sentencia valida de while():", true])
+    if(arValidIfParam(input) | isValidLogOp(input)) {
+      result.push(["Syntaxis correcta para argumentos de while():", true]);
+      return result
+    }
+    result.push(["Error de parametros o operadores de while():", false]);
+    return result
   }
-  //return "No se identifica la sintaxis introducida";
+  return (["No se identifica la sintaxis introducida", false]);
 }
 
-//console.log(identifSyntx('if (b == "a"):'))
+//console.log(identifSyntx('def m("a"):'))
 //console.log(identifSyntx('if (1a>b):\n\tpass'));
