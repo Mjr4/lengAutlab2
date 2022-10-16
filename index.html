@@ -7,9 +7,10 @@
     <title>Proyecto 2</title>
     <link rel="stylesheet" href="./styles.css" />
     <script src="index.js" type="module" defer></script>
+    <script src="https://kit.fontawesome.com/28bca3df58.js" crossorigin="anonymous"></script>
   </head>
   <body>
-    <div class="container">
+    <div class="container" id="contain">
       <div class="title">
         <h1>Proyecto 2</h1>
         <h2>Lenguajes formales y automatas</h2>
@@ -20,7 +21,11 @@
         <textarea id="expr"></textarea>
         <button id="btm" type="submit">Verificar</button>
       </form>
-      <p id="respons"></p>      
+      <div class="responsTable">
+        <i class="fa-regular fa-circle-check" id="check"></i>
+        <i class="fa-solid fa-circle-xmark" id="cross"></i>
+        <p id="respons"></p>      
+      </div>
     </div>
   </body>
 </html>

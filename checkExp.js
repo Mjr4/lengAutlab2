@@ -89,28 +89,33 @@ function isValidParam(functParmList) {
 }
 
 export function identifSyntx(input = "") {
+  let result = [];
   if (isValidIfDecl(input)) {
+    result.push(['Encontrada sentencia valida if():', true]);
     if (!arValidIfParam(input)) {
-      return "Error en condicional no declarada";
+      result.push(["Error en condicional no declarada", false]);
+      return result;
     }
     let [param1, opert, param2] = getIfparam(input);
-    return validateIfParam(param1, opert, param2);
+    let val = validateIfParam(param1, opert, param2)
+    result.push([val, true])
+    return result
   } else if (isValidFunctDecl(input)) {
     if (!arValidFunctParam(input)) {
-      return "Error de parametros";
+      //return "Error de parametros";
     }
     let functParmList = getFunctionParam(input);
     let validIfParam = isValidParam(functParmList);
-    return validIfParam
+    /*return validIfParam
       ? "Correcta declaracion de funcion"
-      : "Error de parametros";
+      : "Error de parametros";*/
   } else if (isValidWhileDecl(input)) {
     if(arValidIfParam(input) | isValidLogOp(input)) {
-      return "Syntaxis correcta para sentencia While";
+      //return "Syntaxis correcta para sentencia While";
     }
-    return "Error de parametros o operadores"
+    //return "Error de parametros o operadores"
   }
-  return "No se identifica la sintaxis introducida";
+  //return "No se identifica la sintaxis introducida";
 }
 
 //console.log(identifSyntx('if (b == "a"):'))

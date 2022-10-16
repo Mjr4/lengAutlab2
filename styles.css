@@ -14,18 +14,19 @@
     display: flex;
 }
 
+#form {
+    margin: 0 40px;
+    align-items: center;
+}
+
+#form .msg {
+    margin: 0 auto;
+}
+
 #form textarea,button{
-    display: block;
-    justify-content: center;
+    display: flex;
     margin: 10px auto;
 }
-
-.msg {
-    display: block;
-    margin:20px px;
-}
-
-
 
 #expr {
     width: 80%;
@@ -34,8 +35,11 @@
     font-size: large;
 }
 
-#respons {
-    margin: 10px auto;
+.responsTable{
     display: flex;
     justify-content: center;
+}
+.responsTable i{
+    margin: auto 20px;
+    display: none;
 }

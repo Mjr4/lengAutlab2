@@ -4,6 +4,12 @@ const verify = document.querySelector("#btm");
 const text = document.querySelector("#expr");
 const form = document.querySelector("#form");
 const resp = document.querySelector("#respons");
+const check = document.querySelector("#check")
+const cross = document.querySelector("#cross")
+const contDivResp = document.querySelector("#responsTable")
+const container = document.querySelector("#contain")
+
+
 
 text.addEventListener('keydown', function(e){
   if (e.key == 'Tab'){
@@ -19,7 +25,13 @@ text.addEventListener('keydown', function(e){
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
-  resp.innerHTML = identifSyntx(text.value);
-  
+  const respIdf = identifSyntx(text.value);
+  resp.innerHTML = respIdf[0][0]
+  if (respIdf[0][1]){
+    cross.style.display="none";
+    check.style.display="block"
+  }else{
+    cross.style.display="block";
+    check.style.display="none"
+  }
 });
-
