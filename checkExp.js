@@ -8,6 +8,7 @@ const expFunct = /^def [a-z]+\((\w|,|\s)*\)\:$/;
 const expWhile = /^while\s*\((\w*|\D*)*\):$/;
 const expGetFunctPar = /\((?<p>(\w+|\s*|,)*\w+)*\)/;
 const expLogOp = /\((?<logOp>(true|false))\)/;
+const expNumb = /^[0-9]+$/
 //const input = 'if(abc==8):'
 
 function isValidVarName(varName = "") {
@@ -25,6 +26,10 @@ function getIfparam(syntax = "") {
 
 function isValidStrgs(input = "") {
   return expStrg.test(input);
+}
+
+function isValidNumb(input = ""){
+  return expNumb.test(input)
 }
 
 function getFunctionParam(syntax = "") {
@@ -71,10 +76,13 @@ function validateIfParam(param1, opert, param2) {
     return ["Correcta declaracion de nombre de variable "+param1+" y literal "+param2, true];
   } else if (isValidStrgs(param1) && isValidVarName(param2) && opert == "==") {
     return ["Correcta declaracion de nombre de variable "+param2+" y literal "+param1, true];
+  } else if(isValidVarName(param1) && isValidNumb(param2)){
+    return ["Correcta declaracion de nombre de variable "+param1+" y constante "+param2, true];
+  } else if(isValidNumb(param1) && isValidVarName(param2)){
+    return ["Correcta declaracion de nombre de variable "+param2+" y constante "+param1, true];
   }else{
     return ["Error de parametros", false];
   }
-  // todo: añadir condicional para numeros
 }
 
 function isValidParam(functParmList) {
@@ -118,11 +126,18 @@ export function identifSyntx(input = "") {
 
   } else if (isValidWhileDecl(input)) {
     result.push(["Encontrada sentencia valida de while():", true])
-    if(arValidIfParam(input) | isValidLogOp(input)) {
-      result.push(["Syntaxis correcta para argumentos de while():", true]);
+  
+    if(arValidIfParam(input)){
+    let [param1, opert, param2] = getIfparam(input);
+    let val = validateIfParam(param1, opert, param2)
+    result.push(val)
+    return result
+    }
+    if (isValidLogOp(input)){
+      result.push(["Valida declaracion de operador logico:", true]);
       return result
     }
-    result.push(["Error de parametros o operadores de while():", false]);
+    result.push(["Syntaxis incorrecta para argumentos de while():", false]);
     return result
   }
   return (["No se identifica la sintaxis introducida", false]);
