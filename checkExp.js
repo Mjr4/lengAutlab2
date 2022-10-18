@@ -116,7 +116,7 @@ export function identifSyntx(input = "") {
     result.push(val);
     return result;
   } else if (isValidFunctDecl(input)) {
-    result.push(["Encontrada declaracion valida de funcion:", true]);
+    result.push(["Encontrada declaracion valida de funcion", true]);
     if (!arValidFunctParam(input)) {
       result.push(["Error de parametros de funcion:", false]);
       return result;

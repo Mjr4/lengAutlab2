@@ -1,31 +1,34 @@
 .container{
-    margin:  5px 50px;
+    margin:  5px 150px;
     border: 2px black solid;
     border-radius: 8px;
 }
 
 .title{
     display: block;
-    margin: 5px;
+    margin: 20px;
 }
 
-.title h1,h2{
+.title h1,h2, h3{
     justify-content: center;
+    margin: 5px;
     display: flex;
 }
 
 #form {
-    margin: 0 40px;
+    margin: 0 150px;
     align-items: center;
+    
 }
 
-#form .msg {
-    margin: 0 auto;
+.msg {
+    margin: 20px auto;
+    font-size: large;
 }
 
 #form textarea,button{
     display: flex;
-    margin: 10px auto;
+    margin: 20px auto;
 }
 
 #expr {
@@ -37,8 +40,15 @@
 
 .responsTable{
     display: flex;
+    margin: 0 auto;
     justify-content: center;
+    font-size: large;
 }
+
+.responsTable p{
+    margin: 10px 0;
+}
+
 .responsTable i{
     margin: auto 20px;
     display: none;
