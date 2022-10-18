@@ -94,7 +94,7 @@ function isValidParam(functParmList) {
   //Funcion que verifica si todos los parametros son validos
   let validParam = true;
   functParmList.forEach((element) => {
-    if (!expVarName.test(element)) {
+    if (!expVarName.test(element.trim())) {
       validParam = false;
       return validParam;
     }

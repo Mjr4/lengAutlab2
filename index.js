@@ -26,6 +26,8 @@ form.addEventListener("submit", (event) => {
   const respIdf = identifSyntx(input.toLowerCase());
   let end = respIdf.flat().length
   let endOfList = respIdf.length
+  
+  cleanResults()
   if (end >2){
     for(i=1; i<endOfList; i++){
       cloneNode("respDiv".concat(i));
@@ -53,13 +55,13 @@ function setDisplay(check,cross,val){
   }
 }
 
-function cleanResults(element){
-  let childs = element.childNodes
-  console.log(childs)
-  console.log(childs.length)
-  if (childs.length > 1){
-    for (let i=3; childs.length; i++){
-      respCont.lastChild.remove()
+function cleanResults(){
+  let childCount = respCont.childElementCount-1
+  console.log(childCount)
+  if (childCount > 0){
+    console.log(respCont.lastElementChild)
+    for (let i=0; i<childCount; i++){
+      respCont.removeChild(respCont.lastElementChild)
     }
   }
 }
