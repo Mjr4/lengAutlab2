@@ -1,11 +1,9 @@
 import {identifSyntx} from './checkExp.js';
 
-const verify = document.querySelector("#btm");
 const text = document.querySelector("#expr");
 const form = document.querySelector("#form");
 const contDivResp = document.querySelector("#respDiv0")
 const container = document.querySelector("#contain")
-const tableR = document.querySelector(".responsTable")
 
 text.addEventListener('keydown', function(e){
   if (e.key == 'Tab'){
@@ -22,7 +20,8 @@ text.addEventListener('keydown', function(e){
 form.addEventListener("submit", (event) => {
   let i = 0
   event.preventDefault();
-  const respIdf = identifSyntx(text.value);
+  let input = text.value.toString()
+  const respIdf = identifSyntx(input.toLowerCase());
   let end = respIdf.length
   for(i=1; i<end; i++){
     cloneNode("respDiv".concat(i));
@@ -41,7 +40,6 @@ form.addEventListener("submit", (event) => {
       check.style.display="none"
     }
   }
-
 });
 
 function cloneNode(index){
