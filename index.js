@@ -57,9 +57,7 @@ function setDisplay(check,cross,val){
 
 function cleanResults(){
   let childCount = respCont.childElementCount-1
-  console.log(childCount)
   if (childCount > 0){
-    console.log(respCont.lastElementChild)
     for (let i=0; i<childCount; i++){
       respCont.removeChild(respCont.lastElementChild)
     }

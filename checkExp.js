@@ -38,6 +38,10 @@ function getFunctionParam(syntax = "") {
   //Funcion que obtiene parametros de funcion
   const param = expGetFunctPar.exec(syntax);
   let paramList = param.groups.p;
+  if (paramList == undefined){
+    paramList = " "
+    return false
+  }
   return paramList.split(",");
 }
 
@@ -122,7 +126,8 @@ export function identifSyntx(input = "") {
       return result;
     }
     let functParmList = getFunctionParam(input);
-    if(functParmList.length==1){
+    if(functParmList == false){
+      result.push(["Declaracion valida sin parametros", true])
       return result
     }
     if (isValidParam(functParmList)) {
