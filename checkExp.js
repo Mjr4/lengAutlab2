@@ -147,5 +147,5 @@ export function identifSyntx(input = "") {
     result.push(["Syntaxis incorrecta para argumentos de ciclo while", false]);
     return result;
   }
-  return ["No se puede identificar la sintaxis introducida", false];
+  return (["No se puede identificar la sintaxis introducida", false]);
 }

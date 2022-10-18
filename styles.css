@@ -38,6 +38,10 @@
     font-size: large;
 }
 
+#responsContainer{
+    margin: 10px;
+}
+
 .responsTable{
     display: flex;
     margin: 0 auto;
