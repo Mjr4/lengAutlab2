@@ -1,13 +1,17 @@
 //const expIf = new RegExp("ab");
-const expId = /[a-z]+(\d|[a-z]|-|_)*/g; // eq ^[a-z]([a-z]|[0-9]|-)*
+const expId = /^[a-z]+(\d|[a-z]|-|_)*/g; // eq ^[a-z]([a-z]|[0-9]|-)*
 const expResvW = /(def|if|while)/g
 const expObj = /(?<name>([a-z]+(\d|[a-z]|-|_)))*\(/g
 const expParOp = /\(/g
 const expParCl = /\)/g
+const expCompOp = /(>|<|==|<=|>=)/g
+const expStrg = /^\"\w*|\s*\"$/g;
+const expNumb = /^[0-9]+$/g;
+const expLogOp = /(true|false)/g
 
 
-function setToken(token='', val='', lastIdx=0){
-  return {token, val, lastIdx}
+function setToken(token='', val=''){
+  return {token, val}
 }
 
 function getIds(input = "") {
@@ -15,7 +19,7 @@ function getIds(input = "") {
   if ((find = expId.exec(input)) !== null){
     let find2 = find;
     if (!(expResvW.test(find2[0]))){
-      return (setToken('id', find2[0],expId.lastIndex))
+      return (setToken('id', find2[0]))
     }
   }
   return null
@@ -23,30 +27,48 @@ function getIds(input = "") {
 
 function testOpenPar(input = ''){
   if ((find = expParOp.exec(input)) != null){
-    return (setToken('OpenPar', find[0], expParOp.lastIndex))
+    return (setToken('OpenPar', find[0]))
+  }
+  return null
+}
+
+function testCompOp(input = ''){
+  if ((find = expCompOp.exec(input)) != null){
+    return (setToken('OperLog', find[0]))
+  }
+  return null
+}
+
+function testLitStrg(input = ''){
+  if ((find = expStrg.exec(input)) != null){
+    return (setToken('LitStrg', find[0]))
+  }
+  return null
+}
+
+function testNumCons(input = ''){
+  if ((find = expNumb.exec(input)) != null){
+    return (setToken('NumConst', find[0]))
+  }
+  return null
+}
+function testLogOp(input = ''){
+  if ((find = expLogOp.exec(input)) != null){
+    return (setToken('LogOp', find[0]))
   }
   return null
 }
 
 function testClosPar(input = ''){
   if ((find = expParCl.exec(input)) != null){
-    return (setToken('ClosPar', find[0], expParCl.lastIndex))
-  }
-  return null
-}
-
-function testObject(input=''){
-  if ((find = expObj.exec(input)) !== null){
-    if((n = getIds(find.groups.name)) != null){
-      return (n)
-    }
+    return (setToken('ClosPar', find[0]))
   }
   return null
 }
 
 function testResvWord(input = ""){
   if ((find = expResvW.exec(input)) !== null){
-    return (setToken('resvW', find[0],expResvW.lastIndex))
+    return (setToken('resvW', find[0]))
   }
   return null
 }
@@ -56,24 +78,43 @@ function getToken(objet){
   return [token, val]
 }
 
+function joinTokens(inputList){
+  allTokens = []
+  inputList.map((element)=>{
+    if ((r = testResvWord(element)) !== null|undefined){
+      allTokens.push(r)
+    }else if ((r = testOpenPar(element)) !== null|undefined){
+      allTokens.push(r)
+    }else if ((r = testClosPar(element)) !== null|undefined){
+      allTokens.push(r)
+    }else if ((r = getIds(element)) !== null|undefined){
+      allTokens.push(r)
+    }else if ((r = testCompOp(element)) !== null|undefined){
+      allTokens.push(r)
+    }else if ((r = testLitStrg(element)) !== null|undefined){
+      allTokens.push(r)
+    }else if ((r = testNumCons(element)) !== null|undefined){
+      allTokens.push(r)
+    }else if ((r = testLogOp(element)) !== null|undefined){
+      allTokens.push(r)
+    }
+  })
+  return allTokens
+}
+
+function getTokenArr(tokenList){
+  tokenStrg = ""
+  console.log(tokenList[0])
+}
+
 function identifSyntx(input = "") {
   //Funcion principal que identifica sintaxis y realiza los procedimientos
   let inputList = input.split(' ')
-  inputList.map((element)=>{
-    if ((r = testResvWord(element)) !== null|undefined){
-      console.log(r)
-    }else if ((r = testOpenPar(element)) !== null|undefined){
-      console.log(r)
-    }else if ((r = testClosPar(element)) !== null|undefined){
-      console.log(r)
-    }else if ((r = getIds(element)) !== null|undefined){
-      console.log(r)
-    }
-  })
-  //console.log(allTokens)
+  let tokenList = joinTokens(inputList)
+  getTokenArr(tokenList)
 }
 
-identifSyntx('while ( true )')
+identifSyntx('if ( a == "hola" )')
 // def main( a , b ):
 // identifSyntx('if (a<b)')
 // identifSyntx('while(a>1)')
