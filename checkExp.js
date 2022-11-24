@@ -1,13 +1,11 @@
-//const expIf = new RegExp("ab");
-const expId = /^[a-z]+(\d|[a-z]|-|_)*/g; // eq ^[a-z]([a-z]|[0-9]|-)*
-const expResvW = /(def|if|while)/g
-const expObj = /(?<name>([a-z]+(\d|[a-z]|-|_)))*\(/g
-const expParOp = /\(/g
-const expParCl = /\)/g
-const expCompOp = /(>|<|==|<=|>=)/g
-const expStrg = /^\"\w*|\s*\"$/g;
-const expNumb = /^[0-9]+$/g;
-const expLogOp = /(true|false)/g
+const expId = /^[a-z]+(\d|[a-z]|-|_)*/; // ID eq ^[a-z]([a-z]|[0-9]|-)*
+const expResvW = /(def|if|while)/   //Palabra Reservada eq a [def|if|while]
+const expParOp = /\(/ //Parentesis Abierto eq a [(]
+const expParCl = /\)/ //Parentesis Cerrado eq a [)]
+const expCompOp = /(>|<|==|<=|>=)/ //Operador comparacion eq a [>|<|==|<=|>=]
+const expStrg = /^\"\w*|\s*\"$/;  //Literal eq a ["[az]*[ ]*"]
+const expNumb = /^[0-9]+$/; //Numero eq a [0-9]
+const expLogOp = /(true|false)/ //Operador logico eq a [true|false]
 
 
 function setToken(token='', val=''){
