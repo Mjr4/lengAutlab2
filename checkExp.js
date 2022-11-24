@@ -74,18 +74,6 @@ function testResvWord(input = ""){
   return null
 }
 
-function getToken(tokenList){
-  let token,val
-  let listTokInd = []
-  tokenList.map((tok)=>{
-    token = tok.token
-    val = tok.val
-    listTokInd.push(token, val)
-  })
-  console.log(listTokInd)
-  return listTokInd
-}
-
 function joinTokens(inputList){
   let allTokens = []
   let r
@@ -136,13 +124,6 @@ export function identifSyntx(input = "") {
   let tokenList = joinTokens(inputList)
   let tokenStrg = getTokenStrg(tokenList)
   let sictacAnlis = sintacAnalisis(tokenStrg)
-  //console.log(sictacAnlis.concat(tokenList))
-  //console.log(tokenList)
   return sictacAnlis.concat(tokenList)
-
 }
 
-//identifSyntx('while ( b < 1)')
-// // def main( a , b ):
-// identifSyntx('if ( a < "hola" )')
-// identifSyntx('def main ( a ) ')

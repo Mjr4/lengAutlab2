@@ -3,7 +3,6 @@ import {identifSyntx} from './checkExp.js';
 const text = document.querySelector("#expr");
 const form = document.querySelector("#form");
 const contDivResp = document.querySelector("#respDiv0")
-const container = document.querySelector("#contain")
 const respCont = document.querySelector("#responsContainer")
 const resp0 = document.querySelector("#resp_0")
 const check_0 = document.querySelector("#check_0")
@@ -24,8 +23,6 @@ form.addEventListener("submit", (event) => {
   event.preventDefault();
   let input = text.value.toString()
   let respIdf = identifSyntx(input.toLowerCase());
-  //console.log(identifSyntx(input.toLowerCase()))
-  let end = respIdf.flat().length
   let endOfList = respIdf.length
   
   cleanResults()
