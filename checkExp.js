@@ -1,156 +1,79 @@
 //const expIf = new RegExp("ab");
-const expVarName = /^[a-z]+(\d|[a-z]|-|_)*$/; // eq ^[a-z]([a-z]|[0-9]|-)*
-const expGetIfPar =/(?<vn>(\w+|\"(\w*\s*)*\"))\s*(?<op>(>|<|==|<=|>=))\s*(?<con>(\w+|\"(\w*\s*)*\"))/; //expresion obtener parametros if equivale {[(]([a-z][ ])*[)][ ]*([>]|[<]|[==]|[<=]|[>=])([a-z]["]([a-z]*[ ]*)*["])}
-const expIfDecl = /if\s*\((\w*|\W*)*\)\:\n(\t|\s{4})(pass)$/; //exp declaracion if equivale a {if[ ]*[(]([a-z]*|[0-9]*)*[):][\t|\s\s\s\s][pass]}
-const expStrg = /^\"\w*|\s*\"/;
-const expFunct = /^def [a-z]+\((\w|,|\s)*\)\:\n(\t|\s{4})(pass)$/;
-const expWhile = /^while\s*\((\w*|\D*)*\):\n(\t|\s{4})(pass)$/;
-const expGetFunctPar = /\((?<p>(\w+|\s*|,)*\w+)*\)/; //exp obtener parametros de funcion {[(](([a-z]*|[ ]|[,])*[a-z]+)*}
-const expLogOp = /\((?<logOp>(true|false))\)/; //exp operador logico {([true]|[false])}
-const expNumb = /^[0-9]+$/;
+const expId = /[a-z]+(\d|[a-z]|-|_)*/g; // eq ^[a-z]([a-z]|[0-9]|-)*
+const expResvW = /(def|if|while)/g
+const expObj = /(?<name>([a-z]+(\d|[a-z]|-|_)))*\(/g
+const expParOp = /\(/g
+const expParCl = /\)/g
 
-function isValidVarName(varName = "") {
-  //Funcion que valida un nombre de variable
-  return expVarName.test(varName);
+
+function setToken(token='', val='', lastIdx=0){
+  return {token, val, lastIdx}
 }
 
-function getIfparam(syntax = "") {
-  //Funcion que obtiene parametros del if
-  let match = expGetIfPar.exec(syntax);
-  let param1 = match.groups.vn;
-  let opert = match.groups.op;
-  let param2 = match.groups.con;
-
-  return [param1, opert, param2];
-}
-
-function isValidStrgs(input = "") {
-  //Funcion que valida cadenas literales
-  return expStrg.test(input);
-}
-
-function isValidNumb(input = "") {
-  //Funcion que valida constantes numericas
-  return expNumb.test(input);
-}
-
-function getFunctionParam(syntax = "") {
-  //Funcion que obtiene parametros de funcion
-  const param = expGetFunctPar.exec(syntax);
-  let paramList = param.groups.p;
-  if (paramList == undefined){
-    paramList = " "
-    return false
-  }
-  return paramList.split(",");
-}
-
-function isValidIfDecl(syntax = "") {
-  //Funcion que valida la declaracion if
-  return expIfDecl.test(syntax);
-}
-
-function arValidIfParam(input = "") {
-  //Funcion que valida parametros del if
-  return expGetIfPar.test(input);
-}
-
-function isValidFunctDecl(syntax = "") {
-  //Funcion que valida declaracion de funcion
-  return expFunct.test(syntax);
-}
-
-function arValidFunctParam(input = "") {
-  //funcion que valida parametros de funcion
-  return expGetFunctPar.test(input);
-}
-
-function isValidWhileDecl(syntax = "") {
-  //funcion que valida declaracion de while
-  return expWhile.test(syntax);
-}
-
-function isValidLogOp(syntax = "") {
-  //funcion que valida operadores logicos
-  return expLogOp.test(syntax);
-}
-
-function validateIfParam(param1, opert, param2) {
-  //funcion que valida combinaciones de parametros
-  if (isValidVarName(param1) && isValidVarName(param2)) {
-    return ["Correcta declaracion de nombres de variable " + param1 + ", " + param2,true];
-  } else if (isValidStrgs(param1) && isValidStrgs(param2) && opert == "==") {
-    return ["Correcta declaracion de literales " + param1 + ", " + param2,true];
-  } else if (isValidVarName(param1) && isValidStrgs(param2) && opert == "==") {
-    return ["Correcta declaracion de nombre de variable " +param1 +" y literal " +param2,true];
-  } else if (isValidStrgs(param1) && isValidVarName(param2) && opert == "==") {
-    return ["Correcta declaracion de nombre de variable " +param2 +" y literal " +param1,true];
-  } else if (isValidVarName(param1) && isValidNumb(param2)) {
-    return ["Correcta declaracion de nombre de variable " +param1 +" y constante " +param2,true];
-  } else if (isValidNumb(param1) && isValidVarName(param2)) {
-    return ["Correcta declaracion de nombre de variable " +param2 +" y constante " +param1,true];
-  } else {
-    return ["Error de parametros", false];
-  }
-}
-
-function isValidParam(functParmList) {
-  //Funcion que verifica si todos los parametros son validos
-  let validParam = true;
-  functParmList.forEach((element) => {
-    if (!expVarName.test(element.trim())) {
-      validParam = false;
-      return validParam;
+function getIds(input = "") {
+  //Funcion retorna id encontrados y sus posiciones
+  if ((find = expId.exec(input)) !== null){
+    let find2 = find;
+    if (!(expResvW.test(find2[0]))){
+      return (setToken('id', find2[0],expId.lastIndex))
     }
-  });
-  return validParam;
+  }
+  return null
 }
 
-export function identifSyntx(input = "") {
+function testOpenPar(input = ''){
+  if ((find = expParOp.exec(input)) != null){
+    return (setToken('OpenPar', find[0], expParOp.lastIndex))
+  }
+  return null
+}
+
+function testClosPar(input = ''){
+  if ((find = expParCl.exec(input)) != null){
+    return (setToken('ClosPar', find[0], expParCl.lastIndex))
+  }
+  return null
+}
+
+function testObject(input=''){
+  if ((find = expObj.exec(input)) !== null){
+    if((n = getIds(find.groups.name)) != null){
+      return (n)
+    }
+  }
+  return null
+}
+
+function testResvWord(input = ""){
+  if ((find = expResvW.exec(input)) !== null){
+    return (setToken('resvW', find[0],expResvW.lastIndex))
+  }
+  return null
+}
+
+function getToken(objet){
+  const {token,val} = objet
+  return [token, val]
+}
+
+function identifSyntx(input = "") {
   //Funcion principal que identifica sintaxis y realiza los procedimientos
-  let result = [];
-  if (isValidIfDecl(input)) {
-    result.push(["Encontrada declaracion valida de condicional if", true]);
-    if (!arValidIfParam(input)) {
-      result.push(["Error en parametros de condicional no declarados", false]);
-      return result;
+  let inputList = input.split(' ')
+  inputList.map((element)=>{
+    if ((r = testResvWord(element)) !== null|undefined){
+      console.log(r)
+    }else if ((r = testOpenPar(element)) !== null|undefined){
+      console.log(r)
+    }else if ((r = testClosPar(element)) !== null|undefined){
+      console.log(r)
+    }else if ((r = getIds(element)) !== null|undefined){
+      console.log(r)
     }
-    let [param1, opert, param2] = getIfparam(input);
-    let val = validateIfParam(param1, opert, param2);
-    result.push(val);
-    return result;
-  } else if (isValidFunctDecl(input)) {
-    result.push(["Encontrada declaracion valida de funcion", true]);
-    if (!arValidFunctParam(input)) {
-      result.push(["Error de parametros de funcion:", false]);
-      return result;
-    }
-    let functParmList = getFunctionParam(input);
-    if(functParmList == false){
-      result.push(["Declaracion valida sin parametros", true])
-      return result
-    }
-    if (isValidParam(functParmList)) {
-      result.push(["Correcta declaracion de parametros en funcion", true]);
-    } else {
-      result.push(["Error de declaracion de parametros", false]);
-    }
-    return result;
-  } else if (isValidWhileDecl(input)) {
-    result.push(["Encontrada declaracion valida de ciclo while", true]);
-
-    if (arValidIfParam(input)) {
-      let [param1, opert, param2] = getIfparam(input);
-      let val = validateIfParam(param1, opert, param2);
-      result.push(val);
-      return result;
-    }
-    if (isValidLogOp(input)) {
-      result.push(["Correcta declaracion de operador logico", true]);
-      return result;
-    }
-    result.push(["Syntaxis incorrecta para argumentos de ciclo while", false]);
-    return result;
-  }
-  return (["No se puede identificar la sintaxis introducida", false]);
+  })
+  //console.log(allTokens)
 }
+
+identifSyntx('while ( true )')
+// def main( a , b ):
+// identifSyntx('if (a<b)')
+// identifSyntx('while(a>1)')
