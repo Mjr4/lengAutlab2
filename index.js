@@ -23,26 +23,27 @@ form.addEventListener("submit", (event) => {
   let i = 0
   event.preventDefault();
   let input = text.value.toString()
-  const respIdf = identifSyntx(input.toLowerCase());
+  let respIdf = identifSyntx(input.toLowerCase());
+  //console.log(identifSyntx(input.toLowerCase()))
   let end = respIdf.flat().length
   let endOfList = respIdf.length
   
   cleanResults()
-  if (end >2){
-    for(i=1; i<endOfList; i++){
+  resp0.innerHTML = respIdf[0]
+  setDisplay(check_0, cross_0, respIdf[1])
+  
+    for(i=2; i<endOfList; i++){
       cloneNode("respDiv".concat(i));
     }
-    for(i=0; i<endOfList; i++){
+    for(i=2; i<endOfList; i++){
       let textResp = document.querySelector("#respDiv"+i).lastElementChild.id
-      document.querySelector("#"+textResp).innerHTML = respIdf[i][0]
+      document.querySelector("#"+textResp).innerHTML = "Token: "+respIdf[i].token+", val: "+respIdf[i].val
       let check = document.querySelector("#check_"+i)
       let cross = document.querySelector("#cross_"+i)
-      setDisplay(check, cross, respIdf[i][1])
+      setDisplay(check, cross,true )
     }
-  }else{
-      resp0.innerHTML = respIdf[0]
-      setDisplay(check_0, cross_0, respIdf[1])
-  }
+
+
 });
 
 function setDisplay(check,cross,val){

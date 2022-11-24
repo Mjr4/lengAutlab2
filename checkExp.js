@@ -6,6 +6,9 @@ const expCompOp = /(>|<|==|<=|>=)/ //Operador comparacion eq a [>|<|==|<=|>=]
 const expStrg = /^\"\w*|\s*\"$/;  //Literal eq a ["[az]*[ ]*"]
 const expNumb = /^[0-9]+$/; //Numero eq a [0-9]
 const expLogOp = /(true|false)/ //Operador logico eq a [true|false]
+const expIf = /resvWif OpenPar id OperComp LitStrg ClosPar/ //Expresion if
+const expFunc = /resvWde id OpenPar (id)* ClosPar/  //expresion funcion
+const expWhile = /resvWwh OpenPar (LogOp|id OperComp NumConst) ClosPar/ //expresion while
 
 
 function setToken(token='', val=''){
@@ -32,7 +35,7 @@ function testOpenPar(input = ''){
 
 function testCompOp(input = ''){
   if ((find = expCompOp.exec(input)) != null){
-    return (setToken('OperLog', find[0]))
+    return (setToken('OperComp', find[0]))
   }
   return null
 }
@@ -66,24 +69,34 @@ function testClosPar(input = ''){
 
 function testResvWord(input = ""){
   if ((find = expResvW.exec(input)) !== null){
-    return (setToken('resvW', find[0]))
+    return (setToken('resvW'+find[0].slice(0,2), find[0]))
   }
   return null
 }
 
-function getToken(objet){
-  const {token,val} = objet
-  return [token, val]
+function getToken(tokenList){
+  let token,val
+  let listTokInd = []
+  tokenList.map((tok)=>{
+    token = tok.token
+    val = tok.val
+    listTokInd.push(token, val)
+  })
+  console.log(listTokInd)
+  return listTokInd
 }
 
 function joinTokens(inputList){
-  allTokens = []
+  let allTokens = []
+  let r
   inputList.map((element)=>{
     if ((r = testResvWord(element)) !== null|undefined){
       allTokens.push(r)
     }else if ((r = testOpenPar(element)) !== null|undefined){
       allTokens.push(r)
     }else if ((r = testClosPar(element)) !== null|undefined){
+      allTokens.push(r)
+    }else if ((r = testLogOp(element)) !== null|undefined){
       allTokens.push(r)
     }else if ((r = getIds(element)) !== null|undefined){
       allTokens.push(r)
@@ -93,26 +106,43 @@ function joinTokens(inputList){
       allTokens.push(r)
     }else if ((r = testNumCons(element)) !== null|undefined){
       allTokens.push(r)
-    }else if ((r = testLogOp(element)) !== null|undefined){
-      allTokens.push(r)
     }
   })
   return allTokens
 }
 
-function getTokenArr(tokenList){
-  tokenStrg = ""
-  console.log(tokenList[0])
+function getTokenStrg(tokenList){
+  let tokenStrg = ""
+  tokenList.map((tok)=>{
+    tokenStrg = tokenStrg+tok.token+" "
+  })
+  return tokenStrg
 }
 
-function identifSyntx(input = "") {
+function sintacAnalisis(tokenStrg){
+  if (expIf.test(tokenStrg)){
+    return ["Sintaxis correcta para declaracion if",true]
+  }else if (expFunc.test(tokenStrg)){
+    return ["Sintaxis correcta para declaracion de funcion", true]
+  }else if (expWhile.test(tokenStrg)){
+    return ["Sintaxis correcta para declaracion de while", true]
+  }
+  return ["No se reconoce la sintaxis", false]
+}
+
+export function identifSyntx(input = "") {
   //Funcion principal que identifica sintaxis y realiza los procedimientos
   let inputList = input.split(' ')
   let tokenList = joinTokens(inputList)
-  getTokenArr(tokenList)
+  let tokenStrg = getTokenStrg(tokenList)
+  let sictacAnlis = sintacAnalisis(tokenStrg)
+  //console.log(sictacAnlis.concat(tokenList))
+  //console.log(tokenList)
+  return sictacAnlis.concat(tokenList)
+
 }
 
-identifSyntx('if ( a == "hola" )')
-// def main( a , b ):
-// identifSyntx('if (a<b)')
-// identifSyntx('while(a>1)')
+//identifSyntx('while ( b < 1)')
+// // def main( a , b ):
+// identifSyntx('if ( a < "hola" )')
+// identifSyntx('def main ( a ) ')
